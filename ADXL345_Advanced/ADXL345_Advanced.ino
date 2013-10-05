@@ -1,5 +1,16 @@
 // Instruction: single or double tap on the device
+//                      For single tap, it will show x, y, and z.
+//                      For double tap, it will additionally show g.
 // https://www.sparkfun.com/tutorials/240
+// My experience
+//               x     y      z
+// z-up                     1g
+// z-down                -1g
+// x-up      1g
+// x-down -1g
+// y-up           1g
+// y-down      -1g
+
 //Add the SPI library so we can communicate with the ADXL345 sensor
 #include <SPI.h>
 
