@@ -8,3 +8,5 @@ The AD8232 heat rate monitor hookup guide is available on https://learn.sparkfun
 
 In processing sketch, the 'Serial.list()[]' port number is the last one shown on my Processing IDE.
 It is counting from zero.
+
+The sensor pad is be found on intenet: biomedical sensor pad covidien.
