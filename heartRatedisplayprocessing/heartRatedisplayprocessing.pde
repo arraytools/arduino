@@ -28,10 +28,11 @@ import processing.serial.*;
 
 Serial myPort;        // The serial port
 int xPos = 1;         // horizontal position of the graph
+int tick=millis();
 float height_old = 0;
 float height_new = 0;
 float inByte = 0;
-
+int baseheight=100;
 
 void setup () {
   // set the window size:
@@ -58,26 +59,36 @@ void serialEvent (Serial myPort) {
   String inString = myPort.readStringUntil('\n');
 
   if (inString != null) {
-    // trim off any whitespace:
-    inString = trim(inString);
+     // trim off any whitespace:
+     inString = trim(inString);
 
-    // If leads off detection is true notify with blue line
-    if (inString.equals("!")) { 
-      stroke(0, 0, 0xff); //Set stroke to blue ( R, G, B)
-      inByte = 512;  // middle of the ADC range (Flat Line)
-    }
-    // If the data is good let it through
-    else {
+     // If leads off detection is true notify with blue line
+     if (inString.equals("!")) { 
+       stroke(0, 0, 0xff); //Set stroke to blue ( R, G, B)
+       inByte = 512;  // middle of the ADC range (Flat Line)
+     }
+     // If the data is good let it through
+     else {
       stroke(0xff, 0, 0); //Set stroke to red ( R, G, B)
       inByte = float(inString); 
      }
-     
+     // println(inString);     
      //Map and draw the line for new data point
      inByte = map(inByte, 0, 1023, 0, height);
-     height_new = height - inByte; 
+     
+     // For some reason, the plot is upside down using the original code. So I modified 9/1/2014.
+     // height_new = height - inByte; 
+     height_new = inByte;
+     
      line(xPos - 1, height_old, xPos, height_new);
      height_old = height_new;
     
+     //tickmark for 200 mseconds
+     if (tick+200<=millis()){
+       stroke(0, 0xff, 0); //Set stroke to green ( R, G, B)
+       line(xPos, baseheight-20, xPos,baseheight+20);
+       tick=millis();
+     }
       // at the edge of the screen, go back to the beginning:
       if (xPos >= width) {
         xPos = 0;
@@ -86,8 +97,7 @@ void serialEvent (Serial myPort) {
       else {
         // increment the horizontal position:
         xPos++;
-      }
-    
+      }    
   }
 }
 
